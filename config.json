@@ -1,0 +1,9 @@
+{
+  "model": "claude-haiku-4-5-20251001",
+  "schedule": [
+    {"time": "01:11", "message": "Say Hi and only Hi"},
+    {"time": "06:20", "message": "Say Hi and only Hi"},
+    {"time": "14:22", "message": "Say Hi and only Hi"},
+    {"time": "20:23", "message": "Say Hi and only Hi"}
+  ]
+}

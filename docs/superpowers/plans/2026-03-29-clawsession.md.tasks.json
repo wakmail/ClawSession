@@ -1,0 +1,11 @@
+{
+  "planPath": "docs/superpowers/plans/2026-03-29-clawsession.md",
+  "tasks": [
+    {"id": 0, "subject": "Task 0: Project Setup", "status": "pending"},
+    {"id": 1, "subject": "Task 1: Sender — SSE Parser", "status": "pending", "blockedBy": [0]},
+    {"id": 2, "subject": "Task 2: Sender — HTTP Communication", "status": "pending", "blockedBy": [1]},
+    {"id": 3, "subject": "Task 3: Scheduler", "status": "pending", "blockedBy": [2]},
+    {"id": 4, "subject": "Task 4: Final Validation", "status": "pending", "blockedBy": [3]}
+  ],
+  "lastUpdated": "2026-03-29T10:00:00"
+}

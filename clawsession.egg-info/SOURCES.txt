@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+clawsession.egg-info/PKG-INFO
+clawsession.egg-info/SOURCES.txt
+clawsession.egg-info/dependency_links.txt
+clawsession.egg-info/requires.txt
+clawsession.egg-info/top_level.txt
