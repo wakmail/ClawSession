@@ -1,2 +1,7 @@
 .env
 __pycache__/
+.venv/
+.DS_Store
+uv.lock
+*.pyc
+docs/superpowers/
