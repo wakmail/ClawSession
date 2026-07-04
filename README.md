@@ -1,21 +1,51 @@
 # ClawSession
 
-A Python script that sends scheduled messages to Claude via claude.ai using a browser cookie, to maximize your usage on the rolling 5-hour window.
+Send scheduled messages to Claude via claude.ai to maximize your rolling 5-hour usage window.
 
 ## Setup
 
-1. Copy your session cookie from browser dev tools
-2. Add it to `.env`:
+1. Get your session cookie and org ID from browser dev tools (Network tab → any request to `claude.ai/api` → copy `sessionKey` cookie and org ID from the URL)
+2. Create a `.env` file:
    ```
-   CLAUDE_COOKIE=sessionKey=sk-ant-...
+   CLAUDE_COOKIE=sk-ant-...
+   ORG_ID=your-org-id-here
    ```
-3. Configure your schedule in `config.json`
-4. Install dependencies: `pip install -r requirements.txt`
-5. Run: `python3 scheduler.py`
+3. Install:
+   ```
+   source .venv/bin/activate
+   pip install -e .
+   ```
+
+That's it. Now `claw` works:
+
+```
+claw "hello"
+```
+
+When you're done, deactivate the virtual environment:
+
+```
+deactivate
+```
+
+Next time, just `source .venv/bin/activate` again and `claw` is back.
+
+## Usage
+
+```
+claw "hello"                  # send a message (uses default model)
+claw "hello" -m sonnet        # send with a specific model
+claw "explain git" -m opus    # model shortcuts: haiku, sonnet, opus
+claw start                    # run the scheduler
+claw config                   # show your config
+claw title <id> "msg"         # auto-title a conversation
+```
+
+You don't need to type `claw send` — just `claw "your message"` works. Quotes are needed when your message has spaces.
 
 ## Config
 
-Set a global model and schedule messages in `config.json`:
+Edit `config.json` to set your default model and schedule:
 
 ```json
 {
@@ -27,28 +57,4 @@ Set a global model and schedule messages in `config.json`:
 }
 ```
 
-Each schedule entry can override the global `model` with its own.
-
-## Standalone Sender
-
-You can also send a one-off message directly:
-
-```
-python3 sender.py "Hello Claude"
-```
-
-This bypasses the scheduler and sends a single message immediately.
-
-## Conversation Naming
-
-By default, conversations are named `Automated Session Started: YYYY-MM-DD HH:MM:SS`. To disable this and send without a name, change the `"name"` field in `sender.py` to `""`.
-
-## Auto-Titler
-
-Generate an auto-title for an existing conversation:
-
-```
-python3 titler.py <conversation_id> "message content"
-```
-
-The conversation ID is the UUID from the claude.ai URL (e.g., `8bec82ba-dbba-4f45-8538-fffba652abda`). The `message_content` can be any text — it doesn't have to match what was actually sent in the conversation. Requires a valid conversation ID that exists on your account.
+Messages are spaced across the 5-hour window. Each entry can override the default model.

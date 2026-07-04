@@ -1,14 +1,17 @@
 [project]
 name = "clawsession"
-version = "0.1.0"
-description = "Python script that sends scheduled messages to Claude via claude.ai"
+version = "0.2.0"
+description = "CLI tool for sending scheduled messages to Claude via claude.ai"
 requires-python = ">=3.10"
 dependencies = [
-    "python-dotenv==1.1.0",
-    "requests==2.32.3",
+    "click>=8.0",
+    "python-dotenv>=1.0",
+    "requests>=2.28",
 ]
+
+[project.scripts]
+claw = "clawsession.cli:cli"
 
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
-
