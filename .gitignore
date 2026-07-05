@@ -1,8 +1,5 @@
 .env
-__pycache__/
-.venv/
 .DS_Store
-uv.lock
-*.pyc
-*.egg-info/
+node_modules/
+dist/
 docs/superpowers/

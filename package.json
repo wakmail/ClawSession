@@ -1,0 +1,32 @@
+{
+  "name": "clawsession",
+  "version": "1.0.0",
+  "description": "Talk to Claude from your terminal",
+  "type": "module",
+  "bin": {
+    "claw": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wakmail/ClawSession.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "cli",
+    "ai"
+  ],
+  "dependencies": {
+    "commander": "^15.0.0",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3"
+  }
+}

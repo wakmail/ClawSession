@@ -1,6 +1,6 @@
 # ClawSession
 
-Send scheduled messages to Claude via claude.ai to maximize your rolling 5-hour usage window.
+Talk to Claude from your terminal. Maximize your rolling 5-hour usage window with scheduled messages.
 
 ## Setup
 
@@ -12,36 +12,33 @@ Send scheduled messages to Claude via claude.ai to maximize your rolling 5-hour 
    ```
 3. Install:
    ```
-   source .venv/bin/activate
-   pip install -e .
+   npm install
+   npm run build
+   npm link
    ```
 
-That's it. Now `claw` works:
+Now `claw` works from anywhere:
 
 ```
 claw "hello"
 ```
 
-When you're done, deactivate the virtual environment:
-
-```
-deactivate
-```
-
-Next time, just `source .venv/bin/activate` again and `claw` is back.
+To uninstall: `npm unlink -g clawsession`
 
 ## Usage
 
 ```
 claw "hello"                  # send a message (uses default model)
 claw "hello" -m sonnet        # send with a specific model
-claw "explain git" -m opus    # model shortcuts: haiku, sonnet, opus
+claw "hello" -m 3             # or by number
+claw "hello" -n "my chat"     # set a custom title
+claw "hello" --no-title       # no title
+claw models                   # list available models
 claw start                    # run the scheduler
 claw config                   # show your config
-claw title <id> "msg"         # auto-title a conversation
 ```
 
-You don't need to type `claw send` — just `claw "your message"` works. Quotes are needed when your message has spaces.
+Just `claw "your message"` works — no need to type `claw send`. Quotes are needed when your message has spaces.
 
 ## Config
 
