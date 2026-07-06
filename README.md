@@ -2,28 +2,24 @@
 
 Talk to Claude from your terminal. Maximize your rolling 5-hour usage window with scheduled messages.
 
+## Install
+
+```
+npm install -g github:wakmail/ClawSession
+```
+
+That's it. Now `claw` works from anywhere.
+
+To uninstall: `npm uninstall -g clawsession`
+
 ## Setup
 
 1. Get your session cookie and org ID from browser dev tools (Network tab → any request to `claude.ai/api` → copy `sessionKey` cookie and org ID from the URL)
-2. Create a `.env` file:
+2. Create a `.env` file in the directory you'll run `claw` from:
    ```
    CLAUDE_COOKIE=sk-ant-...
    ORG_ID=your-org-id-here
    ```
-3. Install:
-   ```
-   npm install
-   npm run build
-   npm link
-   ```
-
-Now `claw` works from anywhere:
-
-```
-claw "hello"
-```
-
-To uninstall: `npm unlink -g clawsession`
 
 ## Usage
 
