@@ -5,7 +5,7 @@ Talk to Claude from your terminal. Maximize your rolling 5-hour usage window wit
 ## Install / Update
 
 ```
-npm install -g github:wakmail/ClawSession
+npm install -g clawsession
 ```
 
 That's it. Now `claw` works from anywhere. Run the same command again to update to the latest version.
