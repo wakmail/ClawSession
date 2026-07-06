@@ -45,6 +45,63 @@ program
   });
 
 program
+  .command("at")
+  .description("Send a message once at a specific time (HH:MM)")
+  .argument("<time>", "time in HH:MM (24-hour)")
+  .argument("<message>")
+  .option("-m, --model <model>", "haiku, sonnet, opus, number, or full model ID")
+  .option("-n, --name <name>", "set a custom conversation title")
+  .option("--no-title", "don't title the conversation")
+  .action(async (time: string, message: string, opts: { model?: string; name?: string; title: boolean }) => {
+    if (!/^\d{2}:\d{2}$/.test(time)) {
+      console.error("Time must be in HH:MM format (e.g. 08:00)");
+      process.exit(1);
+    }
+    const [h, m] = time.split(":").map(Number);
+    if (h > 23 || m > 59) {
+      console.error("Invalid time — hours 00-23, minutes 00-59");
+      process.exit(1);
+    }
+
+    const { cookie, orgId } = getCredentials();
+    const config = loadConfig();
+
+    const model = opts.model ? resolveModel(opts.model) : config.model;
+    let titleMode = config.title ?? "message";
+    if (!opts.title) titleMode = "none";
+    else if (opts.name) titleMode = "custom";
+
+    const target = new Date();
+    target.setHours(h, m, 0, 0);
+    if (target.getTime() <= Date.now()) {
+      target.setDate(target.getDate() + 1); // time already passed today → tomorrow
+    }
+
+    const waitMs = target.getTime() - Date.now();
+    const mins = Math.round(waitMs / 60000);
+    console.log(
+      `Waiting until ${time} to send "${message}" (in ~${mins} min). Keep this running. Ctrl+C to cancel.`
+    );
+
+    setTimeout(async () => {
+      const friendlyName = MODELS.find(([, id]) => id === model)?.[0] ?? model;
+      process.stderr.write(`→ Sending to ${friendlyName}...\n`);
+      try {
+        const response = await sendMessage(cookie, message, model, orgId, titleMode, opts.name);
+        console.log();
+        console.log(response);
+      } catch (e: any) {
+        if (e.message === "rate-limited") {
+          console.error("Rate limited — you've hit the 5-hour usage cap.");
+        } else {
+          console.error(`Error: ${e.message}`);
+        }
+        process.exit(1);
+      }
+    }, waitMs);
+  });
+
+program
   .command("start")
   .description("Run the message scheduler")
   .action(async () => {
@@ -198,7 +255,7 @@ configCmd
   });
 
 // If first arg isn't a known command, treat it as a message to send
-const knownCommands = ["send", "start", "models", "config", "help"];
+const knownCommands = ["send", "at", "start", "models", "config", "help"];
 const args = process.argv.slice(2);
 if (args.length > 0 && !args[0].startsWith("-") && !knownCommands.includes(args[0])) {
   process.argv.splice(2, 0, "send");

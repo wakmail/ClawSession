@@ -31,10 +31,13 @@ claw "hello" -m sonnet        # send with a specific model
 claw "hello" -m 3             # or by number
 claw "hello" -n "my chat"     # set a custom title
 claw "hello" --no-title       # no title
+claw at 14:00 "hello"         # send once at a specific time (waits, then sends)
 claw models                   # list available models
 claw start                    # run the scheduler
 claw config                   # show your config
 ```
+
+`claw at` waits until the given time (today, or tomorrow if it's already passed) and sends once. Keep the terminal open while it waits.
 
 Just `claw "your message"` works — no need to type `claw send`. Quotes are needed when your message has spaces.
 
