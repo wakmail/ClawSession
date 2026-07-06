@@ -5,10 +5,12 @@ Talk to Claude from your terminal. Maximize your rolling 5-hour usage window wit
 ## Install / Update
 
 ```
-npm install -g github:wakmail/ClawSession
+npm install -g --install-links github:wakmail/ClawSession
 ```
 
 That's it. Now `claw` works from anywhere. Run the same command again to update to the latest version.
+
+(The `--install-links` flag makes npm copy the package instead of symlinking it, which avoids a broken-symlink bug when installing straight from GitHub.)
 
 To uninstall: `npm uninstall -g clawsession`
 
