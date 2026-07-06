@@ -6,6 +6,10 @@
   "bin": {
     "claw": "./dist/cli.js"
   },
+  "files": [
+    "dist",
+    "config.json"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts"
