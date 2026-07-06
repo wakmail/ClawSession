@@ -108,15 +108,35 @@ program
       console.log(`  ${i + 1}  ${name.padEnd(12)} ${id}${marker}`);
     });
     console.log();
-    console.log('Use by name or number: claw send "hello" -m sonnet');
-    console.log('                       claw send "hello" -m 2');
-    console.log("Set default:           claw default sonnet");
+    console.log('Use by name or number: claw "hello" -m sonnet');
+    console.log('                       claw "hello" -m 2');
+    console.log("Set default:           claw config model sonnet");
   });
 
-program
-  .command("default")
-  .description("Set the default model")
+const configCmd = program
+  .command("config")
+  .description("View or edit config")
+  .action(() => {
+    const config = loadConfig();
+    console.log(`Model: ${config.model}`);
+    console.log(`Title: ${config.title ?? "message"}`);
+    console.log(`Schedule (${config.schedule.length} messages):`);
+    config.schedule.forEach((entry, i) => {
+      const m = entry.model ?? "default";
+      console.log(`  ${i + 1}. ${entry.time}  "${entry.message.slice(0, 40)}"  (${m})`);
+    });
+    console.log();
+    console.log("Edit config:");
+    console.log("  claw config model sonnet          Set default model");
+    console.log("  claw config title none             Set title mode (message, timestamp, none)");
+    console.log('  claw config add 08:00 "hello"      Add a scheduled message');
+    console.log("  claw config remove 1               Remove a scheduled message by number");
+  });
+
+configCmd
+  .command("model")
   .argument("<model>")
+  .description("Set the default model")
   .action((model: string) => {
     const modelId = resolveModel(model);
     const config = loadConfig();
@@ -126,24 +146,59 @@ program
     console.log(`Default model set to ${name} (${modelId})`);
   });
 
-program
-  .command("config")
-  .description("Show current config")
-  .action(() => {
-    const config = loadConfig();
-    console.log(`Model: ${config.model}`);
-    console.log(`Title: ${config.title ?? "message"}`);
-    console.log(`Schedule (${config.schedule.length} messages):`);
-    for (const entry of config.schedule) {
-      const m = entry.model ?? "default";
-      console.log(
-        `  ${entry.time}  "${entry.message.slice(0, 40)}"  (${m})`
-      );
+configCmd
+  .command("title")
+  .argument("<mode>")
+  .description("Set title mode (message, timestamp, none)")
+  .action((mode: string) => {
+    if (!["message", "timestamp", "none"].includes(mode)) {
+      console.error("Title mode must be: message, timestamp, or none");
+      process.exit(1);
     }
+    const config = loadConfig();
+    config.title = mode;
+    saveConfig(config);
+    console.log(`Title mode set to ${mode}`);
+  });
+
+configCmd
+  .command("add")
+  .argument("<time>")
+  .argument("<message>")
+  .option("-m, --model <model>", "model for this message")
+  .description("Add a scheduled message")
+  .action((time: string, message: string, opts: { model?: string }) => {
+    if (!/^\d{2}:\d{2}$/.test(time)) {
+      console.error("Time must be in HH:MM format (e.g. 08:00)");
+      process.exit(1);
+    }
+    const config = loadConfig();
+    const entry: any = { time, message };
+    if (opts.model) entry.model = resolveModel(opts.model);
+    config.schedule.push(entry);
+    config.schedule.sort((a, b) => a.time.localeCompare(b.time));
+    saveConfig(config);
+    console.log(`Added: ${time}  "${message}"`);
+  });
+
+configCmd
+  .command("remove")
+  .argument("<number>")
+  .description("Remove a scheduled message by number")
+  .action((num: string) => {
+    const config = loadConfig();
+    const idx = parseInt(num) - 1;
+    if (idx < 0 || idx >= config.schedule.length) {
+      console.error(`No message at #${num}. Run 'claw config' to see the list.`);
+      process.exit(1);
+    }
+    const removed = config.schedule.splice(idx, 1)[0];
+    saveConfig(config);
+    console.log(`Removed: ${removed.time}  "${removed.message}"`);
   });
 
 // If first arg isn't a known command, treat it as a message to send
-const knownCommands = ["send", "start", "models", "default", "config", "help"];
+const knownCommands = ["send", "start", "models", "config", "help"];
 const args = process.argv.slice(2);
 if (args.length > 0 && !args[0].startsWith("-") && !knownCommands.includes(args[0])) {
   process.argv.splice(2, 0, "send");
