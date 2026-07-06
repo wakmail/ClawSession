@@ -2,13 +2,13 @@
 
 Talk to Claude from your terminal. Maximize your rolling 5-hour usage window with scheduled messages.
 
-## Install
+## Install / Update
 
 ```
 npm install -g github:wakmail/ClawSession
 ```
 
-That's it. Now `claw` works from anywhere.
+That's it. Now `claw` works from anywhere. Run the same command again to update to the latest version.
 
 To uninstall: `npm uninstall -g clawsession`
 
@@ -38,16 +38,10 @@ Just `claw "your message"` works — no need to type `claw send`. Quotes are nee
 
 ## Config
 
-Edit `config.json` to set your default model and schedule:
-
-```json
-{
-  "model": "claude-haiku-4-5-20251001",
-  "schedule": [
-    {"time": "08:00", "message": "Good morning!"},
-    {"time": "18:00", "message": "Recap my day", "model": "claude-sonnet-4-6"}
-  ]
-}
 ```
-
-Messages are spaced across the 5-hour window. Each entry can override the default model.
+claw config                            # show current settings
+claw config model sonnet               # set default model
+claw config title none                 # set title mode (message, timestamp, none)
+claw config add 08:00 "Good morning!"  # add a scheduled message
+claw config remove 1                   # remove a scheduled message by number
+```
