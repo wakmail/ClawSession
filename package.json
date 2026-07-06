@@ -7,9 +7,9 @@
     "claw": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsc",
-    "prepare": "tsc",
-    "dev": "tsx src/cli.ts"
+    "build": "npx tsc",
+    "prepare": "npx tsc",
+    "dev": "npx tsx src/cli.ts"
   },
   "repository": {
     "type": "git",
