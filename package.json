@@ -4,7 +4,7 @@
   "description": "Talk to Claude from your terminal",
   "type": "module",
   "bin": {
-    "claw": "./dist/cli.js"
+    "claw": "dist/cli.js"
   },
   "files": [
     "dist",
